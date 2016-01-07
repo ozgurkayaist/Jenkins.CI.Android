@@ -3,6 +3,7 @@ Android Continuous Integration with Jenkins
 ===================
 
 ![enter image description here](https://media.licdn.com/mpr/mpr/jc/AAEAAQAAAAAAAAUrAAAAJDJiZWE2MGMxLTJiZTctNGFjMy04NjMwLTE2ZDdkNDU4ZTBhMQ.jpg)
+
 If you have Jenkins CI @ your company and you want to use it for mobile application integrations,  this article is for you !
 
 
