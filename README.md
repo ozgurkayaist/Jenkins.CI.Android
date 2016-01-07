@@ -1,263 +1,131 @@
-Welcome to StackEdit!
+
+Android Continuous Integration with Jenkins
 ===================
 
-
-Hey! I'm your first Markdown document in **StackEdit**[^stackedit]. Don't delete me, I'm very helpful! I can be recovered anyway in the **Utils** tab of the <i class="icon-cog"></i> **Settings** dialog.
-
-----------
-
-
-Documents
--------------
-
-StackEdit stores your documents in your browser, which means all your documents are automatically saved locally and are accessible **offline!**
-
-> **Note:**
-
-> - StackEdit is accessible offline after the application has been loaded for the first time.
-> - Your local documents are not shared between different browsers or computers.
-> - Clearing your browser's data may **delete all your local documents!** Make sure your documents are synchronized with **Google Drive** or **Dropbox** (check out the [<i class="icon-refresh"></i> Synchronization](#synchronization) section).
-
-#### <i class="icon-file"></i> Create a document
-
-The document panel is accessible using the <i class="icon-folder-open"></i> button in the navigation bar. You can create a new document by clicking <i class="icon-file"></i> **New document** in the document panel.
-
-#### <i class="icon-folder-open"></i> Switch to another document
-
-All your local documents are listed in the document panel. You can switch from one to another by clicking a document in the list or you can toggle documents using <kbd>Ctrl+[</kbd> and <kbd>Ctrl+]</kbd>.
-
-#### <i class="icon-pencil"></i> Rename a document
-
-You can rename the current document by clicking the document title in the navigation bar.
-
-#### <i class="icon-trash"></i> Delete a document
-
-You can delete the current document by clicking <i class="icon-trash"></i> **Delete document** in the document panel.
-
-#### <i class="icon-hdd"></i> Export a document
-
-You can save the current document to a file by clicking <i class="icon-hdd"></i> **Export to disk** from the <i class="icon-provider-stackedit"></i> menu panel.
-
-> **Tip:** Check out the [<i class="icon-upload"></i> Publish a document](#publish-a-document) section for a description of the different output formats.
+If you have Jenkins CI @ your company and you want to use it for mobile application integrations,  this article is for you !
 
 
 ----------
 
 
-Synchronization
--------------------
+First of all, There will be minimum 3 Jenkins freestyle jobs. You should reproduce it with different build settings.
 
-StackEdit can be combined with <i class="icon-provider-gdrive"></i> **Google Drive** and <i class="icon-provider-dropbox"></i> **Dropbox** to have your documents saved in the *Cloud*. The synchronization mechanism takes care of uploading your modifications or downloading the latest version of your documents.
+- Build &Unit testing & Code measurements Job
+- Creating a Signed APK package Job
+- Installing APK package to Real Device or Android Emulator Job
 
-> **Note:**
-
-> - Full access to **Google Drive** or **Dropbox** is required to be able to import any document in StackEdit. Permission restrictions can be configured in the settings.
-> - Imported documents are downloaded in your browser and are not transmitted to a server.
-> - If you experience problems saving your documents on Google Drive, check and optionally disable browser extensions, such as Disconnect.
-
-#### <i class="icon-refresh"></i> Open a document
-
-You can open a document from <i class="icon-provider-gdrive"></i> **Google Drive** or the <i class="icon-provider-dropbox"></i> **Dropbox** by opening the <i class="icon-refresh"></i> **Synchronize** sub-menu and by clicking **Open from...**. Once opened, any modification in your document will be automatically synchronized with the file in your **Google Drive** / **Dropbox** account.
-
-#### <i class="icon-refresh"></i> Save a document
-
-You can save any document by opening the <i class="icon-refresh"></i> **Synchronize** sub-menu and by clicking **Save on...**. Even if your document is already synchronized with **Google Drive** or **Dropbox**, you can export it to a another location. StackEdit can synchronize one document with multiple locations and accounts.
-
-#### <i class="icon-refresh"></i> Synchronize a document
-
-Once your document is linked to a <i class="icon-provider-gdrive"></i> **Google Drive** or a <i class="icon-provider-dropbox"></i> **Dropbox** file, StackEdit will periodically (every 3 minutes) synchronize it by downloading/uploading any modification. A merge will be performed if necessary and conflicts will be detected.
-
-If you just have modified your document and you want to force the synchronization, click the <i class="icon-refresh"></i> button in the navigation bar.
-
-> **Note:** The <i class="icon-refresh"></i> button is disabled when you have no document to synchronize.
-
-#### <i class="icon-refresh"></i> Manage document synchronization
-
-Since one document can be synchronized with multiple locations, you can list and manage synchronized locations by clicking <i class="icon-refresh"></i> **Manage synchronization** in the <i class="icon-refresh"></i> **Synchronize** sub-menu. This will let you remove synchronization locations that are associated to your document.
-
-> **Note:** If you delete the file from **Google Drive** or from **Dropbox**, the document will no longer be synchronized with that location.
 
 ----------
 
 
-Publication
--------------
+**A. Required Jenkins Plugins**
+- Android Emulator Plugin: Starts an Android emulator with given  properties before a build, then shuts it down after.
+- Android Lint Plugin: This plugin parses Android Lint analysis results and visualises the issues found.
+- Gradle plugin: This plugin allows Jenkins to invoke Gradle build scripts directly.
+- JaCoCo plugin: This plugin allows you to capture code coverage report from JaCoCo.
+- JUnit Plugin:Allows JUnit-format test results to be published.
+ 
+
+**B.Prerequisites**
+ You must control the following commands are found on your Jenkins master or slave machine. Open the terminal window and run this commands. If an error has occuring during the execution, the commands/application has not installed, or has installed but has not defined in your environment variables
 
-Once you are happy with your document, you can publish it on different websites directly from StackEdit. As for now, StackEdit can publish on **Blogger**, **Dropbox**, **Gist**, **GitHub**, **Google Drive**, **Tumblr**, **WordPress** and on any SSH server.
+    **Commands:**
+    
+    "Android": Command opens Android SDK manager. You should create a new Virtual device or install SDK or Intel HAXM.
+    
+    "adb devices":Lists the connected devices to machine.  ADT Bundle must be installed and configured.
+    
+    "gradle":Run this command after the gradle installation.
+    
+    "java -version": check java and JDK installation version and at the Jenkins build server.
 
-#### <i class="icon-upload"></i> Publish a document
+    **Variables:**
+    
+    "ANDROID_HOME" 
+    /Users/user/ Library/Android/sdk
+    
+     "PATH" Variable values must be added new (not delete the old path values): 
+    
+    /Users/user/Library/Android/sdk/tools
+    
+    /Users/user/Library/Android/sdk/platform-tools
+    
+    /Users/user/gradle-2.9/bin
+    
+    /Library/Java/JavaVirtualMachines/jdk1.7.0_80.jdk/Contents/Home 
 
-You can publish your document by opening the <i class="icon-upload"></i> **Publish** sub-menu and by choosing a website. In the dialog box, you can choose the publication format:
+For windows OS: Run "sysdm.cpl"->Click "Advanced" tab->click "Environment Variables" and add/configure them.
 
-- Markdown, to publish the Markdown text on a website that can interpret it (**GitHub** for instance),
-- HTML, to publish the document converted into HTML (on a blog for example),
-- Template, to have a full control of the output.
+ 
 
-> **Note:** The default template is a simple webpage wrapping your document in HTML format. You can customize it in the **Advanced** tab of the <i class="icon-cog"></i> **Settings** dialog.
+**C. Build & Run Unit Tests**
+- Set your project's source code settings. (Git, TFS, SVN..)
+- Define your build triggering options. You should trigger it  periodically or Hooking (Poll SCM with cron string)
+ 
 
-#### <i class="icon-upload"></i> Update a publication
+    Building(hooking) for each developer check-in  Stash  integration example:
+    
+    Navigate: "YourStashURL/Projects/ProjectName/repos/RepoName /settings/hooks"
+    
+    "Add hook"->"Stash Webhook to Jenkins"
 
-After publishing, StackEdit will keep your document linked to that publication which makes it easy for you to update it. Once you have modified your document and you want to update your publication, click on the <i class="icon-upload"></i> button in the navigation bar.
+ Set Poll SCM value to "00110" @Jenkins build job. So the Jenkins job will be triggered automatically for each code checkin operation immediately.
 
-> **Note:** The <i class="icon-upload"></i> button is disabled when your document has not been published yet.
+Add build step->"Invoke Gradle Script" and configure it. Or do it manually with Executing shell script as the following commands. Add a Shell script to your Jenkins job.
+ 
 
-#### <i class="icon-upload"></i> Manage document publication
+    #for cleaning old builds and build without unit tests
+    
+    gradle clean build -b $WORKSPACE/build.gradle --exclude-task test
+    
+     
+    
+    #for cleaning old builds and build with unit tests
+    
+    gradle clean build -b $WORKSPACE/build.gradle
 
-Since one document can be published on multiple locations, you can list and manage publish locations by clicking <i class="icon-upload"></i> **Manage publication** in the <i class="icon-provider-stackedit"></i> menu panel. This will let you remove publication locations that are associated to your document.
+(Optional Build Step): You should add code coverage analysis "Jacoco" to your jenkins Gradle build job. There is a best practice @ this url
+Add a post build action "Publish Junit test result report"  as the following screenshot. Define the xml files' location that will be used after the gradle build commands has finished.
+ 
 
-> **Note:** If the file has been removed from the website or the blog, the document will no longer be published on that location.
+    $WORKSPACE/build/test-results/*.xml
 
-----------
+ Add a post build action "Publish Android lint results" as the following screenshot.
 
+ 
+**D. Create APK package**
+You should add the following build step shell scripts to your jenkins job. This job must be trigger manually by the team.
 
-Markdown Extra
---------------------
+    #clean old builds and build release ready (not running unit tests)
+    
+    gradle clean assembleRelease -b $WORKSPACE/build.gradle
+    
+     #sign apk file (You should need to create a keystore only once for this step)
+    
+    jarsigner -verbose -keystore PATH/TO/YOUR_RELEASE_KEY.keystore -storepass YOUR_STORE_PASS -keypass YOUR_KEY_PASS PATH/TO/YOUR_UNSIGNED_PROJECT.apk YOUR_ALIAS_NAME
+    
+     #publish apk file
+    
+    zipalign -v 4 PATH/TO/YOUR_SIGNED_PROJECT.apk PATH/TO/YOUR_SIGNED_AND_ALIGNED_PROJECT.apk
 
-StackEdit supports **Markdown Extra**, which extends **Markdown** syntax with some nice features.
 
-> **Tip:** You can disable any **Markdown Extra** feature in the **Extensions** tab of the <i class="icon-cog"></i> **Settings** dialog.
 
-> **Note:** You can find more information about **Markdown** syntax [here][2] and **Markdown Extra** extension [here][3].
+**E. Install Real Android Device(s)**
+You should add the "Install Android Package" build step to your jenkins job. Define your APK's full path here. If you connected a real device(s) to your Jenkins slave/master machine, APK will be installed all of them. 
+This job must be trigger manually by the team.
 
+You must see your device listed at terminal window when you run "adb devices" command.
 
-### Tables
+You should connect via USB or Wireless debugging options. Make sure that your Jenkins is connected to the same network with your Android device which is connected with wifi. 
 
-**Markdown Extra** has a special syntax for tables:
 
-Item     | Value
--------- | ---
-Computer | $1600
-Phone    | $12
-Pipe     | $1
+**F. Install to Android Emulator(s)**
+You should run the Emulator with your properties. Jenkins Job->Build Environment ->"Run an Android emulator during build"
 
-You can specify column alignment with one or two colons:
+*Warning:Android emulator will be slower than the real devices. You must install Intel HAXM (Hardware Accelerated Execution Manager) to your Jenkins master or slave node.*
 
-| Item     | Value | Qty   |
-| :------- | ----: | :---: |
-| Computer | $1600 |  5    |
-| Phone    | $12   |  12   |
-| Pipe     | $1    |  234  |
 
 
-### Definition Lists
 
-**Markdown Extra** has a special syntax for definition lists too:
 
-Term 1
-Term 2
-:   Definition A
-:   Definition B
-
-Term 3
-
-:   Definition C
-
-:   Definition D
-
-	> part of definition D
-
-
-### Fenced code blocks
-
-GitHub's fenced code blocks are also supported with **Highlight.js** syntax highlighting:
-
-```
-// Foo
-var bar = 0;
-```
-
-> **Tip:** To use **Prettify** instead of **Highlight.js**, just configure the **Markdown Extra** extension in the <i class="icon-cog"></i> **Settings** dialog.
-
-> **Note:** You can find more information:
-
-> - about **Prettify** syntax highlighting [here][5],
-> - about **Highlight.js** syntax highlighting [here][6].
-
-
-### Footnotes
-
-You can create footnotes like this[^footnote].
-
-  [^footnote]: Here is the *text* of the **footnote**.
-
-
-### SmartyPants
-
-SmartyPants converts ASCII punctuation characters into "smart" typographic punctuation HTML entities. For example:
-
-|                  | ASCII                        | HTML              |
- ----------------- | ---------------------------- | ------------------
-| Single backticks | `'Isn't this fun?'`            | 'Isn't this fun?' |
-| Quotes           | `"Isn't this fun?"`            | "Isn't this fun?" |
-| Dashes           | `-- is en-dash, --- is em-dash` | -- is en-dash, --- is em-dash |
-
-
-### Table of contents
-
-You can insert a table of contents using the marker `[TOC]`:
-
-[TOC]
-
-
-### MathJax
-
-You can render *LaTeX* mathematical expressions using **MathJax**, as on [math.stackexchange.com][1]:
-
-The *Gamma function* satisfying $\Gamma(n) = (n-1)!\quad\forall n\in\mathbb N$ is via the Euler integral
-
-$$
-\Gamma(z) = \int_0^\infty t^{z-1}e^{-t}dt\,.
-$$
-
-> **Tip:** To make sure mathematical expressions are rendered properly on your website, include **MathJax** into your template:
-
-```
-<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>
-```
-
-> **Note:** You can find more information about **LaTeX** mathematical expressions [here][4].
-
-
-### UML diagrams
-
-You can also render sequence diagrams like this:
-
-```sequence
-Alice->Bob: Hello Bob, how are you?
-Note right of Bob: Bob thinks
-Bob-->Alice: I am good thanks!
-```
-
-And flow charts like this:
-
-```flow
-st=>start: Start
-e=>end
-op=>operation: My Operation
-cond=>condition: Yes or No?
-
-st->op->cond
-cond(yes)->e
-cond(no)->op
-```
-
-> **Note:** You can find more information:
-
-> - about **Sequence diagrams** syntax [here][7],
-> - about **Flow charts** syntax [here][8].
-
-### Support StackEdit
-
-[![](https://cdn.monetizejs.com/resources/button-32.png)](https://monetizejs.com/authorize?client_id=ESTHdCYOi18iLhhO&summary=true)
-
-  [^stackedit]: [StackEdit](https://stackedit.io/) is a full-featured, open-source Markdown editor based on PageDown, the Markdown library used by Stack Overflow and the other Stack Exchange sites.
-
-
-  [1]: http://math.stackexchange.com/
-  [2]: http://daringfireball.net/projects/markdown/syntax "Markdown"
-  [3]: https://github.com/jmcmanus/pagedown-extra "Pagedown Extra"
-  [4]: http://meta.math.stackexchange.com/questions/5020/mathjax-basic-tutorial-and-quick-reference
-  [5]: https://code.google.com/p/google-code-prettify/
-  [6]: http://highlightjs.org/
-  [7]: http://bramp.github.io/js-sequence-diagrams/
-  [8]: http://adrai.github.io/flowchart.js/
+> Written with [StackEdit](https://stackedit.io/).
