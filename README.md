@@ -2,7 +2,7 @@
 Android Continuous Integration with Jenkins
 ===================
 
-![enter image description here](https://media.licdn.com/mpr/mpr/jc/AAEAAQAAAAAAAAUrAAAAJDJiZWE2MGMxLTJiZTctNGFjMy04NjMwLTE2ZDdkNDU4ZTBhMQ.jpg)
+![enter image description here](https://raw.githubusercontent.com/ozgurkayaist/Android.CI.Jenkins/master/images/banner.jpg)
 
 If you have Jenkins CI @ your company and you want to use it for mobile application integrations,  this article is for you !
 
@@ -126,8 +126,18 @@ You should run the Emulator with your properties. Jenkins Job->Build Environment
 
 *Warning:Android emulator will be slower than the real devices. You must install Intel HAXM (Hardware Accelerated Execution Manager) to your Jenkins master or slave node.*
 
+![enter image description here](https://raw.githubusercontent.com/ozgurkayaist/Android.CI.Jenkins/master/images/1.png)
 
+![enter image description here](https://raw.githubusercontent.com/ozgurkayaist/Android.CI.Jenkins/master/images/2.png)
+![enter image description here](https://raw.githubusercontent.com/ozgurkayaist/Android.CI.Jenkins/master/images/3.png)
 
+![enter image description here](https://raw.githubusercontent.com/ozgurkayaist/Android.CI.Jenkins/master/images/4.png)
+![enter image description here](https://raw.githubusercontent.com/ozgurkayaist/Android.CI.Jenkins/master/images/5.png)
+
+![enter image description here](https://raw.githubusercontent.com/ozgurkayaist/Android.CI.Jenkins/master/images/6.png)
+
+![enter image description here](https://raw.githubusercontent.com/ozgurkayaist/Android.CI.Jenkins/master/images/7.png)
 
 
 > Written with [StackEdit](https://stackedit.io/).
+
